@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1644948666654,
+    "username": "teste",
+    "email": "teste@testando.com.br",
+    "password": "$2b$10$w9eH9AUr9OA6J3GE89UF8u/1.GbHKWLtcWlhuCatSpT8eo5Ceuvde"
+  },
+  {
+    "id": 1644949242877,
+    "username": "maisumteste",
+    "email": "testando@borala.com",
+    "password": "$2b$10$M6PKjnD6cIkxg7xcdEf4fOOlOxlQy6O7heaBVHS9ucPOlyOWw4x1W"
+  }
+]

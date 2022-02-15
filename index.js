@@ -1,8 +1,14 @@
 const express = require('express');
 const http = require('http');
+const fs = require('fs');
 const bcrypt = require('bcrypt');
 const path = require("path");
 const bodyParser = require('body-parser');
+
+// lendo os usuários do arquivo dados.json
+// usando readfilesync pra garantir q os dados estejam carregados
+let rawdata = fs.readFileSync('dados.json');
+let usuarios = JSON.parse(rawdata);
 
 const users = require('./data').userDB;
 
@@ -29,8 +35,12 @@ app.post('/cadastro', async (req, res) => {
                 email: req.body.email,
                 password: hashPassword,
             };
-            users.push(newUser);
-            console.log('Lista de Usuários:', users);
+            users.push(newUser)
+            usuarios.push(newUser)
+            
+            // gravando o novo usuário no json de dados
+            let usuariosJson = JSON.stringify(usuarios, null, 2)
+            fs.writeFileSync('dados.json', usuariosJson)
     
             res.send("<div align ='center'><h2>Cadastro efetuado.</h2></div><br><br><div align='center'><a href='./login.html'>login</a></div><br><br><div align='center'><a href='./cadastro.html'>Cadastrar outro usuário</a></div>");
         } else {
