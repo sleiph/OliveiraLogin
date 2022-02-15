@@ -1,0 +1,29 @@
+{
+  "name": "oliveiralogin",
+  "version": "1.0.0",
+  "description": "sistema de login e registro de usuarios",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sleiph/OliveiraLogin.git"
+  },
+  "keywords": [
+    "login",
+    "node"
+  ],
+  "author": "ricardo",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/sleiph/OliveiraLogin/issues"
+  },
+  "homepage": "https://github.com/sleiph/OliveiraLogin#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.1",
+    "express": "^4.17.2"
+  }
+}
