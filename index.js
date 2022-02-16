@@ -4,6 +4,8 @@ const fs = require('fs');
 const bcrypt = require('bcrypt');
 const path = require("path");
 const bodyParser = require('body-parser');
+const cookieParser = require("cookie-parser");
+const sessions = require('express-session');
 
 // lendo os usuários do arquivo dados.json
 // usando readfilesync pra garantir q os dados estejam carregados
@@ -13,11 +15,37 @@ let usuarios = JSON.parse(rawdata);
 const app = express();
 const server = http.createServer(app);
 
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname,'./public')));
+const umDia = 1000 * 60 * 60 * 24;
 
-app.get('/',(req,res) => {
-    res.sendFile(path.join(__dirname,'./public/index.html'));
+app.use(sessions({
+    secret: "aminhachavesecretaehessaksdjfljkghl778",
+    saveUninitialized:true,
+    cookie: { maxAge: umDia },
+    resave: false
+}));
+
+app.use(express.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+
+var session;
+
+
+app.get('/', function (req,res) {
+    session=req.session
+    if(session.userid) {
+        res.sendFile(path.join(__dirname,'./public/usuario.html'));
+    }
+    else {
+        res.sendFile(path.join(__dirname,'./public/index.html'));
+    }
+    app.use(express.static(path.join(__dirname,'./public')));
+});
+
+app.get('/logout',(req,res) => {
+    console.log(req.session)
+    req.session.destroy();
+    res.redirect('/');
 });
 
 app.post('/cadastro', async (req, res) => {
@@ -47,7 +75,7 @@ app.post('/cadastro', async (req, res) => {
             let usuariosJson = JSON.stringify(usuarios, null, 2)
             fs.writeFileSync('dados.json', usuariosJson)
     
-            res.send("<div align ='center'><h2>Cadastro efetuado.</h2></div><br><br><div align='center'><a href='./login.html'>login</a></div><br><br><div align='center'><a href='./cadastro.html'>Cadastrar outro usuário</a></div>");
+            res.send("<div align ='center'><h2>Cadastro efetuado.</h2></div><br><br><div align='center'><a href='./'>Entrar</a></div><br><br><div align='center'><a href='./cadastro.html'>Cadastrar outro usuário</a></div>");
         } else {
             res.send("<div align ='center'><h2>Email já cadastrado.</h2></div><br><br><div align='center'><a href='./cadastro.html'>Cadastrar novamente.</a></div>");
         }
@@ -56,7 +84,7 @@ app.post('/cadastro', async (req, res) => {
     }
 });
 
-app.post('/login', async (req, res) => {
+app.post('/usuario', async (req, res) => {
     try{
         let foundUser = usuarios.find((data) => req.body.email === data.email);
         if (foundUser) {
@@ -66,10 +94,13 @@ app.post('/login', async (req, res) => {
     
             const passwordMatch = await bcrypt.compare(submittedPass, storedPass);
             if (passwordMatch) {
+                session=req.session;
                 let usrname = foundUser.username;
-                res.send(`<div align ='center'><h2>login efetuado.</h2></div><br><br><br><div align ='center'><h3>Olá ${usrname}</h3></div><br><br><div align='center'><a href='./login.html'>Sair</a></div>`);
+                session.userid = foundUser.username;
+                console.log(req.session)
+                res.send(`<div align ='center'><h2><a href='./'>login efetuado.</a></h2></div><br><br><div align ='center'><h3>Olá ${usrname}</h3></div>`);
             } else {
-                res.send("<div align ='center'><h2>Email ou senha inválido.</h2></div><br><br><div align ='center'><a href='./login.html'>tentar novamente</a></div>");
+                res.send("<div align ='center'><h2>Email ou senha inválido.</h2></div><br><br><div align ='center'><a href='./'>tentar novamente</a></div>");
             }
         }
         else {
@@ -78,7 +109,7 @@ app.post('/login', async (req, res) => {
             let fakePass = `$2b$$10$ifgfgfgfgfgfgfggfgfgfggggfgfgfga`;
             await bcrypt.compare(req.body.password, fakePass);
     
-            res.send("<div align ='center'><h2>Email ou senha inválido.</h2></div><br><br><div align='center'><a href='./login.html'>tentar novamente<a><div>");
+            res.send("<div align ='center'><h2>Email ou senha inválido.</h2></div><br><br><div align='center'><a href='./'>tentar novamente<a><div>");
         }
     } catch{
         res.send("Erro Interno do servidor");
