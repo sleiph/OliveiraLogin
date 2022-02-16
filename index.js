@@ -10,8 +10,6 @@ const bodyParser = require('body-parser');
 let rawdata = fs.readFileSync('dados.json');
 let usuarios = JSON.parse(rawdata);
 
-const users = require('./data').userDB;
-
 const app = express();
 const server = http.createServer(app);
 
@@ -23,8 +21,9 @@ app.get('/',(req,res) => {
 });
 
 app.post('/cadastro', async (req, res) => {
+
     try{
-        let foundUser = users.find((data) => req.body.email === data.email);
+        let foundUser = usuarios.find((data) => req.body.email === data.email);
         if (!foundUser) {
     
             let hashPassword = await bcrypt.hash(req.body.password, 10);
@@ -33,9 +32,15 @@ app.post('/cadastro', async (req, res) => {
                 id: Date.now(),
                 username: req.body.username,
                 email: req.body.email,
+                cep: req.body.cep,
+                endereco: req.body.endereco,
+                numero: req.body.numero,
+                complemento: req.body.complemento,
+                uf: req.body.uf,
+                cidade: req.body.cidade,
+                telefone: req.body.telefone,
                 password: hashPassword,
             };
-            users.push(newUser)
             usuarios.push(newUser)
             
             // gravando o novo usuário no json de dados
@@ -53,7 +58,7 @@ app.post('/cadastro', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     try{
-        let foundUser = users.find((data) => req.body.email === data.email);
+        let foundUser = usuarios.find((data) => req.body.email === data.email);
         if (foundUser) {
     
             let submittedPass = req.body.password; 
@@ -62,7 +67,7 @@ app.post('/login', async (req, res) => {
             const passwordMatch = await bcrypt.compare(submittedPass, storedPass);
             if (passwordMatch) {
                 let usrname = foundUser.username;
-                res.send(`<div align ='center'><h2>login efetuado.</h2></div><br><br><br><div align ='center'><h3>Olá ${usrname}</h3></div><br><br><div align='center'><a href='./login.html'>logout</a></div>`);
+                res.send(`<div align ='center'><h2>login efetuado.</h2></div><br><br><br><div align ='center'><h3>Olá ${usrname}</h3></div><br><br><div align='center'><a href='./login.html'>Sair</a></div>`);
             } else {
                 res.send("<div align ='center'><h2>Email ou senha inválido.</h2></div><br><br><div align ='center'><a href='./login.html'>tentar novamente</a></div>");
             }

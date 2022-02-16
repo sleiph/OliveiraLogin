@@ -1,14 +1,15 @@
 [
   {
-    "id": 1644948666654,
-    "username": "teste",
-    "email": "teste@testando.com.br",
-    "password": "$2b$10$w9eH9AUr9OA6J3GE89UF8u/1.GbHKWLtcWlhuCatSpT8eo5Ceuvde"
-  },
-  {
-    "id": 1644949242877,
-    "username": "maisumteste",
-    "email": "testando@borala.com",
-    "password": "$2b$10$M6PKjnD6cIkxg7xcdEf4fOOlOxlQy6O7heaBVHS9ucPOlyOWw4x1W"
+    "id": 1645037228550,
+    "username": "Ricardo",
+    "email": "sleiph@gmail.com",
+    "cep": "07082-320",
+    "endereco": "Rua João Santana",
+    "numero": "135",
+    "complemento": "",
+    "uf": "SP",
+    "cidade": "Guarulhos",
+    "telefone": "(11) 94520-0418",
+    "password": "$2b$10$cJxB6CTGIay5UEBPIJF4yeuWS1A5U5ak4FE6qG4CcdPoS6uPDQtj6"
   }
 ]

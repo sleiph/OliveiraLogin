@@ -15,4 +15,4 @@ npm start
 o servidor fica ouvindo na [porta 3000](http://localhost:3000/).
 
 ### Tecnologias
-Node.js | [Express](https://www.npmjs.com/package/express) | [Bcrypt](https://www.npmjs.com/package/bcrypt) | [Body-parser](https://www.npmjs.com/package/body-parser)
+Node.js | [Express](https://www.npmjs.com/package/express) | [Bcrypt](https://www.npmjs.com/package/bcrypt) | [Body-parser](https://www.npmjs.com/package/body-parser) | JQuery
